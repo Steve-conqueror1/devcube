@@ -47,6 +47,8 @@ const getProjects = async () => {
   await setParams();
   const path = `./${params.filename}.json`;
 
+  const savedData = [];
+
   for (const id of params.ids) {
     try {
       const data = await axios.get(`${process.env.API_URL}/projects/${id}`, {
@@ -57,11 +59,13 @@ const getProjects = async () => {
 
       const { data: projects } = data;
       const copiedProjFilelds = getRequiredData(projects);
-      writeToJSON(path, copiedProjFilelds);
+      savedData.push(copiedProjFilelds);
     } catch (e) {
-      console.log('Erorr Occured--', e.message);
+      console.log('Erorr Occured', e.message);
     }
   }
+
+  writeToJSON(path, savedData);
 };
 
 getProjects();
